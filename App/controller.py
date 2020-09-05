@@ -32,7 +32,7 @@ el modelo varias veces o integrar varias de las respuestas
 del modelo en una sola respuesta. Esta responsabilidad
 recae sobre el controlador.
 """
-
+#antes del miercoles a la midnight
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
