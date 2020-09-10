@@ -37,7 +37,8 @@ operación seleccionada.
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
-
+moviesdetails = "Data\SmallMoviesDetailsCleaned.csv"
+moviescasting = "Data\MoviesCastingRaw-small.csv"
 
 
 
@@ -53,3 +54,48 @@ operación seleccionada.
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+def menuprint():
+    print("Opciones:")
+    print("1- Inicializar Catálogo")
+    print("2- Cargar informacion a una lista")
+    print("3- Cargar información en el catálogo")
+    print("0- Salir")
+
+def main():
+    bt=lt.newList()
+    b=lt.newList()
+    r=lt.newList()
+    t=lt.newList()
+    tr=lt.newList()
+    menuprint()
+    sionR=True
+    opcion=input("Elija rey: \n")
+    while sionR:
+        if int(opcion) in list(range(7)):
+            if int(opcion)==1:
+                controller.iniCatalog()
+            elif int    (opcion)==2:
+                print("Loading files...")
+                MD=controller.loadData(moviesdetails)
+                MC=controller.loadData(moviescasting)
+                print("Loaded files...")
+                print("Loaded ",MD["size"]," elements of Details(list)")
+                print("Loaded ",MC["size"]," elements of Castings(list)")
+            elif int(opcion)==3:
+                loadedC=controller.loadData(moviesdetails)
+                print(loadedC)
+                print("Loaded info:Completed!")    
+#            elif int(opcion)==4:
+#                authorname = input("Nombre del autor a buscar: ")
+#                authorinfo = controller.getBooksByAuthor(cont, authorname)
+#                printAuthorData(authorinfo)
+#            elif int(opcion)==5:
+#                print("naranjas")
+#            elif int(opcion)==6:
+#                print("naranjas")
+            elif int(opcion)==0:
+                sionR=False
+                print("Vemos Rey")
+
+main()
+
