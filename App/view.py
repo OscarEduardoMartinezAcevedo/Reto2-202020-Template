@@ -59,6 +59,11 @@ def menuprint():
     print("1- Inicializar Catálogo")
     print("2- Cargar informacion a una lista")
     print("3- Cargar información en el catálogo")
+    print("4-Peliculas de...(Productora)")
+    print("5-Peliculas dirigidas por:")
+    print("6-Peliculas donde ha hecho presencia")
+    print("7-Peliculas de genero:")
+    print("8-Peliculas de...(Pais)")
     print("0- Salir")
 
 def main():
@@ -85,14 +90,19 @@ def main():
                 loadedC=controller.loadData(moviesdetails)
                 print(loadedC)
                 print("Loaded info:Completed!")    
-#            elif int(opcion)==4:
-#                authorname = input("Nombre del autor a buscar: ")
-#                authorinfo = controller.getBooksByAuthor(cont, authorname)
-#                printAuthorData(authorinfo)
-#            elif int(opcion)==5:
-#                print("naranjas")
-#            elif int(opcion)==6:
-#                print("naranjas")
+            elif int(opcion)==4:
+                #authorname = input("Nombre del autor a buscar: ")
+                #authorinfo = controller.getBooksByAuthor(cont, authorname)
+                #printAuthorData(authorinfo)
+                productora=input("La productora rey \n")
+                print(controller.la4(productora))
+            elif int(opcion)==5:
+                print("naranjas")
+            elif int(opcion)==6:
+                print("naranjas")
+            elif int(opcion)==7:
+                print("naranjas")
+            elif int(opcion)==8:
             elif int(opcion)==0:
                 sionR=False
                 print("Vemos Rey")
