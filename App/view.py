@@ -23,7 +23,7 @@
 import sys
 import config
 from DISClib.ADT import list as lt
-from DISClib.DataStructures import listiterator as it
+from DISClib.DataStructures import arraylistiterator as it
 from App import controller
 assert config
 
@@ -37,8 +37,8 @@ operación seleccionada.
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
-moviesdetails = "Data\SmallMoviesDetailsCleaned.csv"
-moviescasting = "Data\MoviesCastingRaw-small.csv"
+moviesdetails = "Data\AllMoviesDetailsCleaned.csv"
+moviescasting = "Data\AllMoviesCastingRaw.csv"
 
 
 
@@ -74,18 +74,26 @@ def main():
     tr=lt.newList()
     menuprint()
     sionR=True
-    opcion=input("Elija rey: \n")
     while sionR:
-        if int(opcion) in list(range(7)):
+        opcion=input("Elija rey: ")
+        if int(opcion) in list(range(0,9)):
             if int(opcion)==1:
                 controller.iniCatalog()
-            elif int    (opcion)==2:
+            elif int(opcion)==2:
                 print("Loading files...")
                 MD=controller.loadData(moviesdetails)
                 MC=controller.loadData(moviescasting)
                 print("Loaded files...")
                 print("Loaded ",MD["size"]," elements of Details(list)")
                 print("Loaded ",MC["size"]," elements of Castings(list)")
+                #print("Prueba:")
+                #x=0
+                #y=it.newIterator(MD)
+                #while x<5:
+                #    x+=1
+                #    print(it.next(y)['\ufeffid'])
+                #    print(type(it.next(y)))
+
             elif int(opcion)==3:
                 loadedC=controller.loadData(moviesdetails)
                 print(loadedC)
@@ -94,8 +102,8 @@ def main():
                 #authorname = input("Nombre del autor a buscar: ")
                 #authorinfo = controller.getBooksByAuthor(cont, authorname)
                 #printAuthorData(authorinfo)
-                productora=input("La productora rey \n")
-                print(controller.la4(productora))
+                productora=input("La productora rey: \n")
+                print(controller.la4(productora,MD))
             elif int(opcion)==5:
                 print("naranjas")
             elif int(opcion)==6:
@@ -103,9 +111,12 @@ def main():
             elif int(opcion)==7:
                 print("naranjas")
             elif int(opcion)==8:
+                print("naranjas")
             elif int(opcion)==0:
                 sionR=False
                 print("Vemos Rey")
+        else:
+            print("Escriba Bien")
 
 main()
 

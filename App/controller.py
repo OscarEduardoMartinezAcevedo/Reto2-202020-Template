@@ -23,7 +23,8 @@
 import config as cf
 from App import model
 import csv
-
+from DISClib.ADT import list as lt
+import time
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -55,35 +56,6 @@ def loadData(file):
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-def loadCSVFile (file, sep=","):
-    """
-    Carga un archivo csv a una lista
-    Args:
-        file
-            Archivo csv del cual se importaran los datos
-        sep = ";"
-            Separador utilizado para determinar cada objeto dentro del archivo
-        Try:
-        Intenta cargar el archivo CSV a la lista que se le pasa por parametro, si encuentra algun error
-        Borra la lista e informa al usuario
-    Returns: None  
-    """
-    lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
-    #lst = lt.newList("LINKED_LIST") #Usando implementacion linkedlist
-    print("Cargando archivo ....")
-    t1_start = process_time() #ti
-    dialect = csv.excel()
-    dialect.delimiter=sep
-    try:
-        with open(file, encoding="utf-8") as csvfile:
-            spamreader = csv.DictReader(csvfile, dialect=dialect)
-            for row in spamreader: 
-                lt.addLast(lst,row)
-    except:
-        print("Hubo un error con la carga del archivo")
-    t1_stop = process_time() #tf
-    print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
-    return lst
 
 def getBooksByAuthor(catalog, authorname):
     """
@@ -92,14 +64,18 @@ def getBooksByAuthor(catalog, authorname):
     authorinfo = model.getBooksByAuthor(catalog, authorname)
     return authorinfo
 
-def la4(productora):
-    return {"Peliculas: ":model.pelisdeproductora(productora),
-            "Total ":model.totalpelis(model.pelisdeproductora(productora)),
-            "Promedio ":model.promediopelis(model.pelisdeproductora(productora))}
+def la4(productora,MD):
+    return {"Peliculas: ":model.pelisdeproductora(productora,MD),
+            "Total ":model.totalpelis(model.pelisdeproductora(productora,MD)),
+            "Promedio ":model.promediopelis(model.pelisdeproductora(productora,MD))}
 def la5():
+    return None
 
 def la6():
+    return None
 
 def la7():
+    return None
 
 def la8():
+    return None

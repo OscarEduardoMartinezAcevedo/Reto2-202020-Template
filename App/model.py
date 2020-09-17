@@ -24,12 +24,45 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 assert config
+import time
+import csv
+from DISClib.DataStructures import arraylistiterator as it
+
 
 """
 En este archivo definimos los TADs que vamos a usar,
 es decir contiene los modelos con los datos en memoria
 
 """
+def loadCSVFile (file, sep=";"):
+    """
+    Carga un archivo csv a una lista
+    Args:
+        file
+            Archivo csv del cual se importaran los datos
+        sep = ";"
+            Separador utilizado para determinar cada objeto dentro del archivo
+        Try:
+        Intenta cargar el archivo CSV a la lista que se le pasa por parametro, si encuentra algun error
+        Borra la lista e informa al usuario
+    Returns: None  
+    """
+    lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
+    #lst = lt.newList("LINKED_LIST") #Usando implementacion linkedlist
+    print("Cargando archivo ....")
+    t1_start =time.process_time() #ti
+    dialect = csv.excel()
+    dialect.delimiter=sep
+    try:
+        with open(file, encoding="utf-8") as csvfile:
+            spamreader = csv.DictReader(csvfile, dialect=dialect)
+            for row in spamreader: 
+                lt.addLast(lst,row)
+    except:
+        print("Hubo un error con la carga del archivo")
+    t1_stop = time.process_time() #tf
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+    return lst
 
 # -----------------------------------------------------
 # API del TAD Catalogo de Libros
@@ -67,16 +100,28 @@ def getBooksByAuthor(catalog, authorname):
         return me.getValue(author)
     return None
 
-def pelisdeproductora():
+def pelisdeproductora(productora,MD):
+    ite=it.newIterator(MD)
+    pegaron=lt.newList()
+    while it.hasNext(MD)==True:
+        sera=it.next(ite)
+        if sera['production_companies']==productora:
+            lt.addLast(pegaron,sera)
+    return pegaron
 
-
-def totalpelis():
-
+def totalpelis(pegaron):
+    return lt.size(pegaron)
 # ==============================
 # Funciones de Comparacion
 # ==============================
-def promediopelis():
-
+def promediopelis(pegaron):
+    ite=it.newIterator(pegaron)
+    a=0
+    b=0
+    while it.hasNext(ite)==True:
+        a+=int(ite['vote_average'])
+        b+=1
+    return int(a/b)
 
 
 
@@ -106,7 +151,6 @@ def compareIds(id, entry):
         return -1
 
 def compareLanguages(keyname, lenguaje):
-    
     entry = me.getKey(lenguaje)
     if (keyname == authentry):
         return 0
