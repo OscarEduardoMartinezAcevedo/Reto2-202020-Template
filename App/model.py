@@ -26,7 +26,7 @@ from DISClib.DataStructures import mapentry as me
 assert config
 import time
 import csv
-from DISClib.DataStructures import arraylistiterator as it
+from DISClib.DataStructures import listiterator as it
 
 
 """
@@ -102,8 +102,8 @@ def getBooksByAuthor(catalog, authorname):
 
 def pelisdeproductora(productora,MD):
     ite=it.newIterator(MD)
-    pegaron=lt.newList()
-    while it.hasNext(MD)==True:
+    pegaron=lt.newList("ARRAY_LIST")
+    while it.hasNext(ite)==True:
         sera=it.next(ite)
         if sera['production_companies']==productora:
             lt.addLast(pegaron,sera)
@@ -119,9 +119,10 @@ def promediopelis(pegaron):
     a=0
     b=0
     while it.hasNext(ite)==True:
-        a+=int(ite['vote_average'])
+        es=it.next(ite)
+        a+=float(es['vote_average'])
         b+=1
-    return int(a/b)
+    return float(a/b)
 
 
 
