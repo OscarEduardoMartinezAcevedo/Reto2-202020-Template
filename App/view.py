@@ -23,7 +23,7 @@
 import sys
 import config
 from DISClib.ADT import list as lt
-from DISClib.DataStructures import arraylistiterator as it
+from DISClib.DataStructures import listiterator as it
 from App import controller
 assert config
 
@@ -102,6 +102,7 @@ def main():
                 #authorname = input("Nombre del autor a buscar: ")
                 #authorinfo = controller.getBooksByAuthor(cont, authorname)
                 #printAuthorData(authorinfo)
+                MD=controller.loadData(moviesdetails)
                 productora=input("La productora rey: \n")
                 print(controller.la4(productora,MD))
             elif int(opcion)==5:
