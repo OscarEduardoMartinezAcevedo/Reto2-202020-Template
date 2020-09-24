@@ -115,6 +115,9 @@ def main():
                 print(controller.showgenres(catalogo, genero))
                 t2 = time.process_time()
                 print("time running: ", t2-t1,' seconds')
+            elif int(opcion)==8:
+                pais=input("Pais: ")
+                print(controller.showcountry(catalogo,pais))
             elif int(opcion)==0:
                 sionR=False
                 print("Vemos Rey")
