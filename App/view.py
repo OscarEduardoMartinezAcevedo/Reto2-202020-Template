@@ -105,14 +105,26 @@ def main():
                 MD=controller.loadData(moviesdetails)
                 productora=input("La productora rey: \n")
                 print(controller.la4(productora,MD))
-            elif int(opcion)==5:
-                print("naranjas")
-            elif int(opcion)==6:
-                print("naranjas")
-            elif int(opcion)==7:
-                print("naranjas")
-            elif int(opcion)==8:
-                print("naranjas")
+            #elif int(opcion)==5:
+                #print("naranjas")
+            elif int(opcion)== 5:
+                director = input("El director rey: \n")
+                t1 = process_time()
+                print(controller.mostrar_directores(catalogo, director))
+                t2 = process_time()
+                print("time running: ", t2-t1,' seconds')
+            elif int(opcion)== 6:
+                actor = input("El actor rey: \n")
+                t1 = process_time()
+                print(controller.mostrar_actor(catalogo, actor))
+                t2 = process_time()
+                print("time running: ", t2-t1,' seconds')
+            elif int(opcion)== 7:
+                genero = input("El genero rey: \n")
+                t1 = process_time()
+                print(controller.mostrar_generos(catalogo, genero))
+                t2 = process_time()
+                print("time running: ", t2-t1,' seconds')
             elif int(opcion)==0:
                 sionR=False
                 print("Vemos Rey")
