@@ -70,10 +70,9 @@ def loadCSVFile (file, sep=";"):
 def catalogo():
     catalogo = {"archivo_peliculas": None,
                 "peliculasxcompañia": None,
-                "Peliculasxdirector": None,
-                "Peliculasxgenero":None,
+                "peliculasxdirector": None,
+                "peliculasxgenero":None,
                 "peliculasxactor":None}
-
 
     catalogo["peliculasxcompañia"] = mp.newMap( numelements=1000,
                                                     prime=109345121,   
@@ -117,45 +116,64 @@ def addcompany(catalogo, movie, compañia):
     """
     Añade el nombre de una compañia a la tabla de Hash para compañias en el catalogo
     """
-    if mp.contains(catalogo["peliculas_por_compañia"], compañia) == True:
-        n = mp.get(catalogo["peliculas_por_compañia"], compañia)
+    if mp.contains(catalogo["peliculasxcompañia"], compañia) == True:
+        n = mp.get(catalogo["peliculasxcompañia"], compañia)
         lt.addLast(me.getValue(n), {"titulo":movie["original_title"], "calificacion":float(movie["vote_average"])})
     else:
         N = lt.newList("ARRAY_LIST")
         lt.addLast(N, {"titulo":movie["original_title"], "calificacion":float(movie["vote_average"])})
-        mp.put(catalogo["peliculas_por_compañia"], compañia, N)
+        mp.put(catalogo["peliculasxcompañia"], compañia, N)
 
 
 
 def adddirector(catalogo, movie, director):
-    C = catalogo["peliculas_por_director"]
-    L = movie["id"]
+    C = catalogo["peliculasxdirector"]
+    if "id" in movie:
+        L = movie["id"]
+    elif '\ufeffid' in movie:
+        L = movie['\ufeffid']
     if mp.contains(C, director) == False:
-        mp.put(catalogo["peliculas_por_director"], director, [])
+        mp.put(catalogo["peliculasxdirector"], director, [])
     addpelistodirector(catalogo, L, director)
 
 
 def addgenero(catalogo, movie, generos):
     for a in generos:
-        if mp.contains(catalogo["peliculas_por_genero"], a):
-            addpelistogenre(catalogo, movie["id"] ,a)
+        if mp.contains(catalogo["peliculasxgenero"], a) and "id" in movie:
+            addpelistogenre(catalogo, movie['id'] ,a)
+        elif mp.contains(catalogo["peliculasxgenero"], a) and '\ufeffid' in movie:
+            addpelistogenre(catalogo, movie['\ufeffid'] ,a)
         else:
             D = lt.newList("ARRAY_LIST")
             lt.addLast(D, {"titulo":movie["original_title"], "calificacion":float(movie["vote_average"])})
-            mp.put(catalogo["peliculas_por_genero"], a, D)
+            mp.put(catalogo["peliculasxgenero"], a, D)
             
 
 def addactor(catalogo, movie):
     C = {}
-    Ana = catalogo["peliculas_por_actor"]
+    Ana = catalogo["peliculasxactor"]
     for a in range(1, 6):
         fila = "actor"+str(a)+"_name"
         actor = movie[fila]
-        if mp.contains(Ana, movie[fila]):
-            addpelistoactor(catalogo, movie["id"], actor, movie)
+        if mp.contains(Ana, movie[fila]) and "id" in movie:
+            addpelistoactor(catalogo, movie['id'], actor, movie)
+        elif mp.contains(Ana, movie[fila]) and "\ufeffid" in movie:
+            addpelistoactor(catalogo, movie['\ufeffid'], actor, movie)
         else:
-            mp.put(catalogo["peliculas_por_actor"], actor, [])
-    
+            mp.put(catalogo["peliculasxactor"], actor, [])
+
+def addcountry(catalogo, movie, pais):
+    if mp.contains(catalogo["peliculasxpais"], pais) == True:
+        n = mp.get(catalogo["peliculasxcompañia"], pais)
+        addpelistocountry(catalogo, movie['\ufeffid'], pais, movie)
+        if "id" in movie:
+            addpelistocountry(catalogo, movie["id"], pais, movie)
+        elif '\ufeffid' in movie:
+            addpelistocountry(catalogo, movie['\ufeffid'], pais, movie)
+    else:
+        G = lt.newList("ARRAY_LIST")
+        lt.addLast(G, {"titulo":movie["original_title"], "año de lanzamiento":movie["release_date"]})
+        mp.put(catalogo["peliculasxpais"], pais, G)    
 
 def calificacion(lista):
     N = 0
@@ -213,7 +231,7 @@ def addpelistodirector(catalogo, idp, director):
     cat = catalogo["archivo_peliculas"]
     B = mp.get(cat, idp)
     A = me.getValue(B)
-    n = mp.get(catalogo["peliculas_por_director"], director)
+    n = mp.get(catalogo["peliculasxdirector"], director)
     M = me.getValue(n)
     M.append(A)
 
@@ -221,7 +239,7 @@ def addpelistogenre(catalogo, idp, genero):
     cat = catalogo["archivo_peliculas"]
     B = mp.get(cat, idp)
     A = me.getValue(B)
-    n = mp.get(catalogo["peliculas_por_genero"], genero)
+    n = mp.get(catalogo["peliculasxgenero"], genero)
     M = me.getValue(n)
     lt.addLast(M, A)
 
@@ -229,10 +247,20 @@ def addpelistoactor(catalogo, idp, actor, movie):
     cat = catalogo["archivo_peliculas"]
     B = mp.get(cat, idp)
     A = me.getValue(B)
-    A["Nombre director"] = movie["director_name"]
-    n = mp.get(catalogo["peliculas_por_actor"], actor)
+    n = mp.get(catalogo["peliculasxactor"], actor)
     M = me.getValue(n)
+    A["Nombre director"] = movie["director_name"]
     M.append(A)
+
+def addpelistocountry(catalogo, idp, pais, movie):
+    cat = catalogo["archivo_peliculas"]
+    B = mp.get(cat, idp)
+    A = me.getValue(B)
+    A["Fecha de lanzamiento"] = movie["release_date"]
+    n = mp.get(catalogo["peliculasxpais"], pais)
+    M = me.getValue(n)
+    del A["calificacion"]
+    lt.addLast(M, A)
 
 # ==============================
 # Funciones de consulta
@@ -259,38 +287,44 @@ def totalpelis(pegaron):
     return lt.size(pegaron)
 
 def showdirector(catalogo, direc):
-    if mp.contains(catalogo["peliculas_por_director"], direc):
-        A = mp.get(catalogo["peliculas_por_director"], direc)
+    if mp.contains(catalogo["peliculasxdirector"], direc):
+        A = mp.get(catalogo["peliculasxdirector"], direc)
         A = me.getValue(A)
     else:
         A = "No files.author found"
     return A
 
-def showcompanies(catalog, compan):
-    if mp.contains(catalog["peliculas_por_compañia"], compan):
-        A = mp.get(catalog["peliculas_por_compañia"], compan)
+def showcompanies(catalogo, compan):
+    if mp.contains(catalogo["peliculasxcompañia"], compan):
+        A = mp.get(catalogo["peliculasxcompañia"], compan)
         A = me.getValue(A)
     else:
         A ="No files.company found"
-    return A
+
 
 def showgenres(catalogo, genr):
-    if mp.contains(catalogo["peliculas_por_genero"], genr):
-        A = mp.get(catalogo["peliculas_por_genero"], genr)
+    if mp.cxns(catalogo["peliculasxgenero"], genr):
+        A = mp.get(catalogo["peliculasxgenero"], genr)
         A = me.getValue(A)
     else:
         A ="No files.genre found"
     return A
 
 def showactors(catalogo, acto):
-    if mp.contains(catalogo["peliculas_por_actor"], acto):
-        A = mp.get(catalogo["peliculas_por_actor"], acto)
+    if mp.contains(catalogo["peliculasxactor"], acto):
+        A = mp.get(catalogo["peliculasxactor"], acto)
         A = me.getValue(A)
     else:
         A ="No files.actor found"
     return A
 
-
+def showcountry(catalogo, pais):
+    if mp.contains(catalogo["peliculasxpais"], pais):
+        A = mp.get(catalogo["peliculasxpais"], pais)
+        A = me.getValue(A)
+    else:
+        A ="No files.country found"
+    return A
 # ==============================
 # Funciones de Comparacion
 # ==============================

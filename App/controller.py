@@ -83,8 +83,12 @@ def loaddatas(catalogo, archivo):
         model.addmovie(catalogo, movie)
         compañia = movie["production_companies"] # Se obtienen las compañias
         generos = (movie["genres"]).split(sep="|")
-        model.añadir_compañia(catalogo, movie, compañia)
-        model.añadir_genero(catalogo, movie, generos)
+        model.addcompany(catalogo, movie, compañia)
+        model.addgenero(catalogo, movie, generos)        	
+        pais = movie["production_countries"] #Se obtienen los paises
+        model.addcompany(catalogo, movie, compañia)
+        model.addgenero(catalogo, movie, generos)
+        model.addcountry(catalogo, movie, pais)
 
 def loadcasting(catalogo, archivo):
     sep = ";"
@@ -95,8 +99,8 @@ def loadcasting(catalogo, archivo):
 
     for movie in input_file:
         director = movie["director_name"]
-        model.añadir_director(catalogo, movie, director)
-        model.añadir_actor(catalogo, movie)
+        model.adddirector(catalogo, movie, director)
+        model.addactor(catalogo, movie)
 
 
 
@@ -127,6 +131,13 @@ def showgenres(catalogo, genr):
 def showactors(catalogo, acto):
     N = model.showactors(catalogo, acto)
     if N != "No files.actor found":
+        C = model.calificacionActor(N)
+        return [C, N]
+    else:
+        return N
+def showcountry(catalogo, pais):
+    N = model.showcountry(catalogo, pais)
+    if N != "No files.country found":
         C = model.calificacionActor(N)
         return [C, N]
     else:
